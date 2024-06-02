@@ -42,7 +42,6 @@ const handleWall = () => {
     title: 'Wall Node',
     description: 'Click on the grid to draw the wall node'
   })
-
 }
 </script>
 
@@ -64,7 +63,7 @@ const handleWall = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
-            <Button size="icon">
+            <Button size="icon" @click="handleEnd">
               <RouteOff />
             </Button>
           </TooltipTrigger>
@@ -76,7 +75,7 @@ const handleWall = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
-            <Button size="icon">
+            <Button size="icon" @click="handleWall">
               <BrickWall />
             </Button>
           </TooltipTrigger>

@@ -5,17 +5,21 @@ import { isStart, setStart, isEnd, setEnd } from '@/lib/store'
 import { graph, setStartNode, setEndNode } from '@/lib/graph'
 
 const handleNodeClick = (node: INode) => {
+  console.log(isStart.value, isEnd.value)
+  console.log(node)
   if (isStart.value === true) {
     setStartNode(node.row, node.col)
     setStart(false)
+    console.log(node)
+    return
   }
 
   if (isEnd.value === true) {
     setEndNode(node.row, node.col)
     setEnd(false)
+    console.log(node)
+    return
   }
-
-  console.log(node)
 }
 </script>
 
