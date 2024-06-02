@@ -5,9 +5,6 @@ export const setStart = (value: boolean) => {
   isStart.value = value
   isEnd.value = false
   isWall.value = false
-  console.log('isStart', isStart.value)
-  console.log('isEnd', isEnd.value)
-  console.log('isWall', isWall.value)
 }
 
 export const isEnd = ref<boolean>(false)
