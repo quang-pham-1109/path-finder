@@ -1,8 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import Toaster from './components/ui/toast/Toaster.vue'
 </script>
 
 <template>
+  <Toaster />
   <div class="container">
     <RouterView />
   </div>

@@ -12,6 +12,38 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
+import { setStart, setEnd, setWall } from '@/lib/store'
+import { clearEndNode, clearStartNode } from '@/lib/graph'
+import { useToast } from '@/components/ui/toast'
+
+const { toast } = useToast()
+
+const handleStart = () => {
+  clearStartNode()
+  setStart(true)
+  return toast({
+    title: 'Start Node',
+    description: 'Click on the grid to set the start node'
+  })
+}
+
+const handleEnd = () => {
+  clearEndNode()
+  setEnd(true)
+  return toast({
+    title: 'End Node',
+    description: 'Click on the grid to set the end node'
+  })
+}
+
+const handleWall = () => {
+  setWall(true)
+  return toast({
+    title: 'Wall Node',
+    description: 'Click on the grid to draw the wall node'
+  })
+
+}
 </script>
 
 <template>
@@ -20,7 +52,7 @@ import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
-            <Button size="icon">
+            <Button size="icon" @click="handleStart">
               <Route />
             </Button>
           </TooltipTrigger>
