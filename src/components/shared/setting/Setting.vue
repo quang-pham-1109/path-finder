@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
 import { setStart, setEnd, setWall } from '@/lib/store'
-import { clearEndNode, clearStartNode } from '@/lib/graph'
+import { clearEndNode, clearStartNode, clearGraph } from '@/lib/graph'
 import { useToast } from '@/components/ui/toast'
 
 const { toast } = useToast()
@@ -41,6 +41,17 @@ const handleWall = () => {
   return toast({
     title: 'Wall Node',
     description: 'Click on the grid to draw the wall node'
+  })
+}
+
+const handleReset = () => {
+  clearGraph()
+  setStart(false)
+  setEnd(false)
+  setWall(false)
+  return toast({
+    title: 'Reset',
+    description: 'All nodes are reset'
   })
 }
 </script>
@@ -99,7 +110,7 @@ const handleWall = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
-            <Button size="icon">
+            <Button size="icon" @click="handleReset">
               <Eraser />
             </Button>
           </TooltipTrigger>

@@ -19,6 +19,16 @@ for (let i = 0; i < GRID_SIZE; i++) {
   }
 }
 
+export const clearGraph = () => {
+  for (const node of graph.value) {
+    node.isWall = false
+    node.isVisited = false
+    node.isStart = false
+    node.isEnd = false
+    node.isPath = false
+  }
+}
+
 // Set the start node
 export const setStartNode = (row: number, col: number) => {
   graph.value[row * GRID_SIZE + col].isStart = true
