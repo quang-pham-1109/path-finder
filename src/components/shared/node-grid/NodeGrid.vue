@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { INode } from '@/lib/type'
 import { Node } from '../node'
-import { isStart, setStart, isEnd, setEnd } from '@/lib/store'
-import { graph, setStartNode, setEndNode } from '@/lib/graph'
+import { isStart, setStart, isEnd, setEnd, isWall } from '@/lib/utils/store'
+import { graph, setStartNode, setWallNode, setEndNode } from '@/lib/utils/graph'
 
 const handleNodeClick = (node: INode) => {
   if (isStart.value === true) {
@@ -14,6 +14,11 @@ const handleNodeClick = (node: INode) => {
   if (isEnd.value === true) {
     setEndNode(node.row, node.col)
     setEnd(false)
+    return
+  }
+
+  if (isWall.value === true) {
+    setWallNode(node.row, node.col)
     return
   }
 }

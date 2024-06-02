@@ -1,0 +1,24 @@
+<script setup="ts">
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+
+const props = defineProps({
+  icon: { type: Object, required: true },
+  tooltipContent: { type: String, required: true }
+})
+</script>
+
+<template>
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <Button size="icon" @click="handleStart">
+          <component :is="icon" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Set Start</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+</template>

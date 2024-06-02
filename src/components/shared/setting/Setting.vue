@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup="ts">
 import { Button } from '@/components/ui/button'
+import { ref, watch } from 'vue'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   Select,
@@ -12,8 +13,9 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
-import { setStart, setEnd, setWall } from '@/lib/store'
-import { clearEndNode, clearStartNode, clearGraph } from '@/lib/graph'
+import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/lib/utils/store'
+import { clearEndNode, clearStartNode, clearGraph, graph } from '@/lib/utils/graph'
+import { dfs, dijkstra, aStar } from '@/lib/algorithms'
 import { useToast } from '@/components/ui/toast'
 
 const { toast } = useToast()
@@ -37,6 +39,13 @@ const handleEnd = () => {
 }
 
 const handleWall = () => {
+  if (isWall.value === true) {
+    setWall(false)
+    return toast({
+      title: 'Wall Node',
+      description: 'Wall node is disabled'
+    })
+  }
   setWall(true)
   return toast({
     title: 'Wall Node',
@@ -53,6 +62,45 @@ const handleReset = () => {
     title: 'Reset',
     description: 'All nodes are reset'
   })
+}
+
+const algorithmSelect = ref('')
+watch(algorithmSelect, (value) => {
+  setAlgorithm(value)
+})
+
+const handleRun = () => {
+  if (algorithm.value === '') {
+    return toast({
+      title: 'Error',
+      description: 'Please select an algorithm',
+      variant: 'destructive'
+    })
+  }
+
+  if (algorithm.value === 'a*') {
+    //TODO: import a* algorithm
+    // aStar(graph)
+    return toast({
+      description: `Run ${algorithm.value} algorithm`
+    })
+  }
+
+  if (algorithm.value === 'dfs') {
+    //TODO: import dfs algorithm
+    // dfs(graph)
+    return toast({
+      description: `Run ${algorithm.value} algorithm`
+    })
+  }
+
+  if (algorithm.value === 'dijkstra') {
+    //TODO: import dijkstra algorithm
+    // dijkstra(graph)
+    return toast({
+      description: `Run ${algorithm.value} algorithm`
+    })
+  }
 }
 </script>
 
@@ -98,7 +146,7 @@ const handleReset = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
-            <Button size="icon">
+            <Button size="icon" @click="handleRun">
               <Play />
             </Button>
           </TooltipTrigger>
@@ -121,15 +169,16 @@ const handleReset = () => {
       </TooltipProvider>
     </div>
     <div>
-      <Select>
+      <Select v-model="algorithmSelect">
         <SelectTrigger>
           <SelectValue placeholder="Select an algorithm" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Algorithms</SelectLabel>
-            <SelectItem value="bfs"> Breath-first Search </SelectItem>
+            <SelectItem value="a*"> A* Algorithm </SelectItem>
             <SelectItem value="dfs"> Dept-first Search </SelectItem>
+            <SelectItem value="dijkstra"> Dijkstra's Algorithm </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { INode } from './type'
+import type { INode } from '../type'
 import { GRID_SIZE } from './constant'
 
 export const graph = ref<INode[]>([])
@@ -49,4 +49,9 @@ export const clearEndNode = () => {
   for (const node of graph.value) {
     node.isEnd = false
   }
+}
+
+// Set the wall node
+export const setWallNode = (row: number, col: number) => {
+  graph.value[row * GRID_SIZE + col].isWall = true
 }

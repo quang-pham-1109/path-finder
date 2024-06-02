@@ -20,3 +20,8 @@ export const setWall = (value: boolean) => {
   isStart.value = false
   isEnd.value = false
 }
+
+export const algorithm = ref<string>('')
+export const setAlgorithm = (value: string) => {
+  algorithm.value = value
+}
