@@ -1,8 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup="ts">
-import { Button } from '@/components/ui/button'
 import { ref, watch } from 'vue'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   Select,
   SelectContent,
@@ -12,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { ButtonTooltip } from '@/components/ui/button-tooltip'
 import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
 import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/lib/utils/store'
 import { clearEndNode, clearStartNode, clearGraph, graph } from '@/lib/utils/graph'
@@ -80,7 +79,7 @@ const handleRun = () => {
 
   if (algorithm.value === 'a*') {
     //TODO: import a* algorithm
-    // aStar(graph)
+    // aStar(graph.value)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -88,7 +87,7 @@ const handleRun = () => {
 
   if (algorithm.value === 'dfs') {
     //TODO: import dfs algorithm
-    // dfs(graph)
+    // dfs(graph.value)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -96,7 +95,7 @@ const handleRun = () => {
 
   if (algorithm.value === 'dijkstra') {
     //TODO: import dijkstra algorithm
-    // dijkstra(graph)
+    // dijkstra(graph.value)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -107,66 +106,11 @@ const handleRun = () => {
 <template>
   <section class="flex flex-col gap-4">
     <div class="flex gap-4">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button size="icon" @click="handleStart">
-              <Route />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Set Start</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button size="icon" @click="handleEnd">
-              <RouteOff />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Set End</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button size="icon" @click="handleWall">
-              <BrickWall />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Set Wall</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button size="icon" @click="handleRun">
-              <Play />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Run</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger as-child>
-            <Button size="icon" @click="handleReset">
-              <Eraser />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Clear Canvas</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <ButtonTooltip :icon="Route" tooltipContent="Set Start" :handleClick="handleStart" />
+      <ButtonTooltip :icon="RouteOff" tooltipContent="Set End" :handleClick="handleEnd" />
+      <ButtonTooltip :icon="BrickWall" tooltipContent="Set Wall" :handleClick="handleWall" />
+      <ButtonTooltip :icon="Play" tooltipContent="Run" :handleClick="handleRun" />
+      <ButtonTooltip :icon="Eraser" tooltipContent="Clear Canvas" :handleClick="handleReset" />
     </div>
     <div>
       <Select v-model="algorithmSelect">

@@ -2,9 +2,10 @@
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-const props = defineProps({
+defineProps({
   icon: { type: Object, required: true },
-  tooltipContent: { type: String, required: true }
+  tooltipContent: { type: String, required: true },
+  handleClick: { type: Function, required: false }
 })
 </script>
 
@@ -12,7 +13,7 @@ const props = defineProps({
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger as-child>
-        <Button size="icon" @click="handleStart">
+        <Button size="icon" @click="handleClick">
           <component :is="icon" />
         </Button>
       </TooltipTrigger>

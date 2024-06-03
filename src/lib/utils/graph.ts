@@ -30,8 +30,10 @@ export const clearGraph = () => {
 }
 
 // Set the start node
+export const startNode = ref<INode>()
 export const setStartNode = (row: number, col: number) => {
   graph.value[row * GRID_SIZE + col].isStart = true
+  startNode.value = graph.value[row * GRID_SIZE + col]
 }
 
 export const clearStartNode = () => {
@@ -41,8 +43,10 @@ export const clearStartNode = () => {
 }
 
 // Set the end node
+export const endNode = ref<INode>()
 export const setEndNode = (row: number, col: number) => {
   graph.value[row * GRID_SIZE + col].isEnd = true
+  endNode.value = graph.value[row * GRID_SIZE + col]
 }
 
 export const clearEndNode = () => {
