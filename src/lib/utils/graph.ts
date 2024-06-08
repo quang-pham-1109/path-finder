@@ -29,6 +29,44 @@ export const clearGraph = () => {
   }
 }
 
+export const randomGraph = () => {
+  clearGraph()
+  let startSet = false
+  let endSet = false
+
+  for (const node of graph.value) {
+    if (!startSet && Math.random() < 0.1) {
+      node.isStart = true
+      startSet = true
+      continue
+    }
+
+    if (!endSet && Math.random() < 0.1) {
+      node.isEnd = true
+      endSet = true
+      continue
+    }
+
+    if (Math.random() < 0.3) {
+      node.isWall = true
+    }
+  }
+
+  // If start or end node was not set, set them now
+  if (!startSet) {
+    const startNodeIndex = Math.floor(Math.random() * graph.value.length)
+    graph.value[startNodeIndex].isStart = true
+  }
+
+  if (!endSet) {
+    let endNodeIndex: number
+    do {
+      endNodeIndex = Math.floor(Math.random() * graph.value.length)
+    } while (graph.value[endNodeIndex].isStart) // Ensure end node is not the same as start node
+
+    graph.value[endNodeIndex].isEnd = true
+  }
+}
 // Set the start node
 export const startNode = ref<INode>()
 export const setStartNode = (row: number, col: number) => {
