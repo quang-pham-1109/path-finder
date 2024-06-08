@@ -18,7 +18,7 @@ defineProps({
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Set Start</p>
+        {{ tooltipContent }}
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

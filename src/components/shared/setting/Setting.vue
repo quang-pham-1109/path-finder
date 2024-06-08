@@ -11,9 +11,9 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { ButtonTooltip } from '@/components/ui/button-tooltip'
-import { Eraser, Route, RouteOff, Play, BrickWall } from 'lucide-vue-next'
+import { Eraser, Route, RouteOff, Play, BrickWall, Shuffle } from 'lucide-vue-next'
 import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/lib/utils/store'
-import { clearEndNode, clearStartNode, clearGraph, graph } from '@/lib/utils/graph'
+import { clearEndNode, clearStartNode, clearGraph, graph, randomGraph } from '@/lib/utils/graph'
 import { dfs, dijkstra, aStar } from '@/lib/algorithms'
 import { useToast } from '@/components/ui/toast'
 
@@ -63,6 +63,20 @@ const handleReset = () => {
   })
 }
 
+const handleRandom = () => {
+  clearGraph()
+  setStart(false)
+  setEnd(false)
+  setWall(false)
+
+  randomGraph()
+
+  return toast({
+    title: 'Randomize',
+    description: 'Randomize the grid'
+  })
+}
+
 const algorithmSelect = ref('')
 watch(algorithmSelect, (value) => {
   setAlgorithm(value)
@@ -109,6 +123,11 @@ const handleRun = () => {
       <ButtonTooltip :icon="Route" tooltipContent="Set Start" :handleClick="handleStart" />
       <ButtonTooltip :icon="RouteOff" tooltipContent="Set End" :handleClick="handleEnd" />
       <ButtonTooltip :icon="BrickWall" tooltipContent="Set Wall" :handleClick="handleWall" />
+      <ButtonTooltip
+        :icon="Shuffle"
+        tooltipContent="Randomize Canvas"
+        :handleClick="handleRandom"
+      />
       <ButtonTooltip :icon="Play" tooltipContent="Run" :handleClick="handleRun" />
       <ButtonTooltip :icon="Eraser" tooltipContent="Clear Canvas" :handleClick="handleReset" />
     </div>
