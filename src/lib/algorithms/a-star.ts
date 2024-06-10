@@ -1,6 +1,6 @@
-import type { INode } from '../type'
-import { startNode, endNode } from '../utils/graph'
+import type { INode } from '../type';
 
 export const aStar = (graph: INode[]) => {
   //TODO: implement a* algorithm
+  return 'hello world';
 }
