@@ -26,7 +26,7 @@ const getNeighbors = (node: INode, graph: INode[]): INode[] => {
   for (const direction of directions) {
     const neighborRow = node.row + direction.row;
     const neighborCol = node.col + direction.col;
-    const neighbor = graph.find(n => n.row === neighborRow && n.col === neighborCol);
+    const neighbor = graph.filter(n => n.row === neighborRow && n.col === neighborCol);
     if (neighbor && !neighbor.isWall) {
       neighbors.push(neighbor);
     }
@@ -69,7 +69,7 @@ export const aStar = (graph: INode[]): INode[] => {
       const heuristicValue = heuristic(neighbor, endNode);
       const totalDistance = tentativeDistance + heuristicValue;
 
-      const openNeighbor = openSet.find(node => node.row === neighbor.row && node.col === neighbor.col);
+      const openNeighbor = openSet.filter(node => node.row === neighbor.row && node.col === neighbor.col);
       if (!openNeighbor || tentativeDistance < openNeighbor.distance) {
         if (openNeighbor) {
           openNeighbor.priority = totalDistance;
