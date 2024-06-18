@@ -1,91 +1,90 @@
-// lib/algorithms/aStar.ts
-
-import type { INode } from '../type';
-import { endNode, startNode } from '../utils/graph';
-
-interface INodeWithPriority extends INode {
-  priority: number;
-  distance: number;
-  previousNode?: INodeWithPriority;
-}
+import type { INode } from '../type'
+import { GRID_SIZE } from '../utils/constant'
+import { endNode, graph, startNode } from '../utils/graph'
 
 const heuristic = (nodeA: INode, nodeB: INode): number => {
-  // Using Manhattan distance as the heuristic
-  return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col);
-};
+  return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col)
+}
 
-const getNeighbors = (node: INode, graph: INode[]): INode[] => {
-  const neighbors: INode[] = [];
-  const directions = [
-    { row: -1, col: 0 }, // up
-    { row: 1, col: 0 },  // down
-    { row: 0, col: -1 }, // left
-    { row: 0, col: 1 }   // right
-  ];
+const getNeighbors = (node: INode): INode[] => {
+  const neighbors: INode[] = []
+  const { row, col } = node
 
-  for (const direction of directions) {
-    const neighborRow = node.row + direction.row;
-    const neighborCol = node.col + direction.col;
-    const neighbor = graph.filter(n => n.row === neighborRow && n.col === neighborCol);
-    if (neighbor && !neighbor.isWall) {
-      neighbors.push(neighbor);
-    }
+  if (row > 0) neighbors.push(graph.value[(row - 1) * GRID_SIZE + col]) // Up
+  if (row < GRID_SIZE - 1) neighbors.push(graph.value[(row + 1) * GRID_SIZE + col]) // Down
+  if (col > 0) neighbors.push(graph.value[row * GRID_SIZE + (col - 1)]) // Left
+  if (col < GRID_SIZE - 1) neighbors.push(graph.value[row * GRID_SIZE + (col + 1)]) // Right
+
+  return neighbors
+}
+
+const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): INode[] => {
+  const totalPath = [current]
+
+  while (cameFrom.has(current)) {
+    current = cameFrom.get(current)!
+    totalPath.push(current)
   }
 
-  return neighbors;
-};
+  return totalPath.reverse()
+}
 
-export const aStar = (graph: INode[]): INode[] => {
-  const openSet: INodeWithPriority[] = [];
-  const closedSet: Set<INode> = new Set();
-  const start = { ...startNode, priority: 0, distance: 0 } as INodeWithPriority;
-  openSet.push(start);
+const visualizePath = (path: INode[]) => {
+  path.forEach(node => {
+    node.isPath = true
+  })
+}
 
-  while (openSet.length > 0) {
-    // Sort the open set by priority (smallest first)
-    openSet.sort((a, b) => a.priority - b.priority);
-    const current = openSet.shift() as INodeWithPriority;
-    
-    // Check if we have reached the end node
-    if (current.row === endNode.row && current.col === endNode.col) {
-      // Reconstruct path
-      const path: INode[] = [];
-      let temp: INodeWithPriority | undefined = current;
-      while (temp) {
-        path.push(temp);
-        temp.isPath = true;  // Mark the node as part of the path
-        temp = temp.previousNode;
+
+
+export const aStar = (graph: INode[]) => {
+    const openSet: INode[] = []
+    const closedSet: Set<INode> = new Set()
+    const cameFrom: Map<INode, INode | null> = new Map()
+    const gScore: Map<INode, number> = new Map()
+    const fScore: Map<INode, number> = new Map()
+  
+    openSet.push(startNode.value!)
+  
+    graph.forEach(node => {
+      gScore.set(node, Infinity)
+      fScore.set(node, Infinity)
+    })
+  
+    gScore.set(startNode.value!, 0)
+    fScore.set(startNode.value!, heuristic(startNode.value!, endNode.value!))
+  
+    while (openSet.length > 0) {
+      openSet.sort((a, b) => fScore.get(a)! - fScore.get(b)!)
+      const current = openSet.shift()!
+  
+      if (current === endNode.value) {
+        const path = reconstructPath(cameFrom, current)
+        visualizePath(path)
+        return path
       }
-      return path.reverse();
-    }
-    
-    closedSet.add(current);
-    
-    const neighbors = getNeighbors(current, graph);
-    for (const neighbor of neighbors) {
-      if (closedSet.has(neighbor)) continue;
-
-      const tentativeDistance = current.distance + 1; // Assuming uniform cost for simplicity
-      const heuristicValue = heuristic(neighbor, endNode);
-      const totalDistance = tentativeDistance + heuristicValue;
-
-      const openNeighbor = openSet.filter(node => node.row === neighbor.row && node.col === neighbor.col);
-      if (!openNeighbor || tentativeDistance < openNeighbor.distance) {
-        if (openNeighbor) {
-          openNeighbor.priority = totalDistance;
-          openNeighbor.distance = tentativeDistance;
-          openNeighbor.previousNode = current;
-        } else {
-          openSet.push({
-            ...neighbor,
-            priority: totalDistance,
-            distance: tentativeDistance,
-            previousNode: current
-          } as INodeWithPriority);
+  
+      closedSet.add(current)
+  
+      getNeighbors(current).forEach(neighbor => {
+        if (closedSet.has(neighbor) || neighbor.isWall) {
+          return
         }
-      }
+  
+        const tentativeGScore = gScore.get(current)! + 1
+  
+        if (!openSet.includes(neighbor)) {
+          openSet.push(neighbor)
+        } else if (tentativeGScore >= gScore.get(neighbor)!) {
+          return
+        }
+  
+        cameFrom.set(neighbor, current)
+        gScore.set(neighbor, tentativeGScore)
+        fScore.set(neighbor, tentativeGScore + heuristic(neighbor, endNode.value!))
+      })
     }
+  
+    return [] // Return empty path if there's no solution
   }
 
-  return []; // Return empty if no path is found
-};
