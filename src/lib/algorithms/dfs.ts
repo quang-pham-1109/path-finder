@@ -1,16 +1,5 @@
 import type { INode } from '../type'
-import { delay } from '../utils/utils'
-
-export const visualizePath = async (path: INode[]) => {
-  for (const node of path) {
-    if (node.isStart || node.isEnd) {
-      continue
-    }
-    await delay(10)
-    node.isPath = true
-    node.isVisited = false
-  }
-}
+import { delayRender } from '../utils/utils'
 
 export const dfs = async (graph: INode[]): Promise<INode[]> => {
   const startNode = graph.find((node) => node.isStart)
@@ -32,7 +21,7 @@ export const dfs = async (graph: INode[]): Promise<INode[]> => {
 
     if (!currentNode.isStart && !currentNode.isEnd) {
       currentNode.isVisited = true
-      await delay(10)
+      await delayRender()
     }
 
     path.push(currentNode)
