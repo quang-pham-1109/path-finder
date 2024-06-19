@@ -1,6 +1,6 @@
 import type { INode } from '../type'
 import { GRID_SIZE } from '../utils/constant'
-import { endNode, graph, startNode } from '../utils/graph'
+import { graph } from '../utils/graph'
 
 const heuristic = (nodeA: INode, nodeB: INode): number => {
   return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col)
@@ -30,7 +30,7 @@ const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): IN
 }
 
 const visualizePath = (path: INode[]) => {
-  path.forEach(node => {
+  path.forEach((node) => {
     node.isPath = true
   })
 }
@@ -42,21 +42,27 @@ export const aStar = (graph: INode[]) => {
   const gScore: Map<INode, number> = new Map()
   const fScore: Map<INode, number> = new Map()
 
-  openSet.push(startNode.value!)
+  // Getting startNode and endNode from graph
+  const startNode = graph.find((node) => node.isStart)
+  const endNode = graph.find((node) => node.isEnd)
 
-  graph.forEach(node => {
+  if (!startNode || !endNode) {
+    return []
+  }
+
+  for (const node of graph) {
     gScore.set(node, Infinity)
     fScore.set(node, Infinity)
-  })
+  }
 
-  gScore.set(startNode.value!, 0)
-  fScore.set(startNode.value!, heuristic(startNode.value!, endNode.value!))
+  gScore.set(startNode, 0)
+  fScore.set(startNode, heuristic(startNode, endNode))
 
   while (openSet.length > 0) {
     openSet.sort((a, b) => fScore.get(a)! - fScore.get(b)!)
     const current = openSet.shift()!
 
-    if (current === endNode.value) {
+    if (current === endNode) {
       const path = reconstructPath(cameFrom, current)
       visualizePath(path)
       return path
@@ -64,7 +70,7 @@ export const aStar = (graph: INode[]) => {
 
     closedSet.add(current)
 
-    getNeighbors(current).forEach(neighbor => {
+    getNeighbors(current).forEach((neighbor) => {
       if (closedSet.has(neighbor) || neighbor.isWall) {
         return
       }
@@ -79,62 +85,9 @@ export const aStar = (graph: INode[]) => {
 
       cameFrom.set(neighbor, current)
       gScore.set(neighbor, tentativeGScore)
-      fScore.set(neighbor, tentativeGScore + heuristic(neighbor, endNode.value!))
+      fScore.set(neighbor, tentativeGScore + heuristic(neighbor, endNode))
     })
   }
 
-  return [] 
+  return []
 }
-
-const createNode = (row: number, col: number, isWall = false): INode => ({
-  row,
-  col,
-  isWall,
-  isPath: false,
-  isStart: false,
-  isEnd: false,
-  isVisited: false
-})
-
-
-const testGridSize = 5
-
-const nodes: INode[] = []
-
-for (let row = 0; row < testGridSize; row++) {
-  for (let col = 0; col < testGridSize; col++) {
-    nodes.push(createNode(row, col))
-  }
-}
-
-// Set start and end nodes for the test
-const testStartNode = nodes[0] 
-const testEndNode = nodes[24] 
-
-const testGraph = {
-  value: nodes
-}
-
-startNode.value = testStartNode
-endNode.value = testEndNode
-
-
-testStartNode.isStart = true
-testEndNode.isEnd = true
-
-
-nodes[6].isWall = true
-nodes[7].isWall = true
-nodes[8].isWall = true
-nodes[11].isWall = true
-nodes[16].isWall = true
-nodes[17].isWall = true
-
-
-const result = aStar(testGraph.value)
-
-console.log("Shortest path:")
-result.forEach(node => {
-  console.log(`Node at (${node.row}, ${node.col})`)
-})
-

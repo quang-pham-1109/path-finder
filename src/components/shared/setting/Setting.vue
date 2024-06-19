@@ -93,8 +93,8 @@ const handleRun = async () => {
   }
 
   if (algorithm.value === 'a*') {
-    //TODO: import a* algorithm
-    // aStar(graph.value)
+    const path = aStar(graph.value)
+    console.log(path)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
