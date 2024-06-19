@@ -2,12 +2,10 @@ import type { INode } from '../type'
 import { GRID_SIZE } from '../utils/constant'
 import { endNode, graph, startNode } from '../utils/graph'
 
-// Heuristic function for A* (Manhattan Distance)
 const heuristic = (nodeA: INode, nodeB: INode): number => {
   return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col)
 }
 
-// Function to get neighbors of a node
 const getNeighbors = (node: INode): INode[] => {
   const neighbors: INode[] = []
   const { row, col } = node
@@ -20,7 +18,6 @@ const getNeighbors = (node: INode): INode[] => {
   return neighbors
 }
 
-// Function to reconstruct the path from endNode to startNode
 const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): INode[] => {
   const totalPath = [current]
 
@@ -32,14 +29,12 @@ const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): IN
   return totalPath.reverse()
 }
 
-// Function to visualize the path (mark nodes as part of the path)
 const visualizePath = (path: INode[]) => {
   path.forEach(node => {
     node.isPath = true
   })
 }
 
-// A* Algorithm
 export const aStar = (graph: INode[]) => {
   const openSet: INode[] = []
   const closedSet: Set<INode> = new Set()
@@ -88,10 +83,9 @@ export const aStar = (graph: INode[]) => {
     })
   }
 
-  return [] // Return empty path if there's no solution
+  return [] 
 }
 
-// Testing the A* function
 const createNode = (row: number, col: number, isWall = false): INode => ({
   row,
   col,
@@ -102,10 +96,9 @@ const createNode = (row: number, col: number, isWall = false): INode => ({
   isVisited: false
 })
 
-// Define a simple 5x5 grid for testing
+
 const testGridSize = 5
 
-// Create graph nodes
 const nodes: INode[] = []
 
 for (let row = 0; row < testGridSize; row++) {
@@ -115,23 +108,21 @@ for (let row = 0; row < testGridSize; row++) {
 }
 
 // Set start and end nodes for the test
-const testStartNode = nodes[0] // Top-left corner
-const testEndNode = nodes[24] // Bottom-right corner
+const testStartNode = nodes[0] 
+const testEndNode = nodes[24] 
 
-// Mock graph structure
 const testGraph = {
   value: nodes
 }
 
-// Assign the start and end nodes globally
 startNode.value = testStartNode
 endNode.value = testEndNode
 
-// Mark start and end nodes
+
 testStartNode.isStart = true
 testEndNode.isEnd = true
 
-// Add some walls to test pathfinding
+
 nodes[6].isWall = true
 nodes[7].isWall = true
 nodes[8].isWall = true
@@ -139,7 +130,7 @@ nodes[11].isWall = true
 nodes[16].isWall = true
 nodes[17].isWall = true
 
-// Test the A* function
+
 const result = aStar(testGraph.value)
 
 console.log("Shortest path:")
@@ -147,7 +138,3 @@ result.forEach(node => {
   console.log(`Node at (${node.row}, ${node.col})`)
 })
 
-// Example assertions if using Jest (uncomment if Jest is set up)
-// expect(result.length).toBeGreaterThan(0)
-// expect(result[0]).toBe(testStartNode)
-// expect(result[result.length - 1]).toBe(testEndNode)
