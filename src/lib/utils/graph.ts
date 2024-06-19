@@ -97,3 +97,4 @@ export const clearEndNode = () => {
 export const setWallNode = (row: number, col: number) => {
   graph.value[row * GRID_SIZE + col].isWall = true
 }
+
