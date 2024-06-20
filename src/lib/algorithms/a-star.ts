@@ -22,7 +22,7 @@ const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): IN
   const totalPath = [current]
 
   while (cameFrom.has(current)) {
-    current = cameFrom.get(current)!
+    current = cameFrom.get(current)! // Non-null assertion should be safe here if we check cameFrom.has(current)
     totalPath.push(current)
   }
 
@@ -35,7 +35,7 @@ const visualizePath = (path: INode[]) => {
   })
 }
 
-export const aStar = (graph: INode[]) => {
+export const aStar = (graph: INode[]): INode[] => {
   const openSet: INode[] = []
   const closedSet: Set<INode> = new Set()
   const cameFrom: Map<INode, INode | null> = new Map()
@@ -47,7 +47,7 @@ export const aStar = (graph: INode[]) => {
   const endNode = graph.find((node) => node.isEnd)
 
   if (!startNode || !endNode) {
-    return []
+    return [] // Return an empty array if startNode or endNode is not found
   }
 
   for (const node of graph) {
@@ -57,9 +57,10 @@ export const aStar = (graph: INode[]) => {
 
   gScore.set(startNode, 0)
   fScore.set(startNode, heuristic(startNode, endNode))
+  openSet.push(startNode)
 
   while (openSet.length > 0) {
-    openSet.sort((a, b) => fScore.get(a)! - fScore.get(b)!)
+    openSet.sort((a, b) => fScore.get(a)! - fScore.get(b)!) // Sort openSet based on fScore
     const current = openSet.shift()!
 
     if (current === endNode) {
@@ -89,5 +90,5 @@ export const aStar = (graph: INode[]) => {
     })
   }
 
-  return []
+  return [] // Return an empty array if no path is found
 }
