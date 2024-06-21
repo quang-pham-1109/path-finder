@@ -13,7 +13,14 @@ import {
 import { ButtonTooltip } from '@/components/ui/button-tooltip'
 import { Eraser, Route, RouteOff, Play, BrickWall, Shuffle } from 'lucide-vue-next'
 import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/lib/utils/store'
-import { clearEndNode, clearStartNode, clearGraph, graph, randomGraph } from '@/lib/utils/graph'
+import {
+  clearEndNode,
+  clearStartNode,
+  clearGraph,
+  graph,
+  randomGraph,
+  clearPath
+} from '@/lib/utils/graph'
 import { dfs, dijkstra, aStar } from '@/lib/algorithms'
 import { useToast } from '@/components/ui/toast'
 import { visualizePathReactive, visualizePathStatic } from '@/lib/utils/utils'
@@ -93,6 +100,8 @@ const handleRun = async () => {
   }
 
   if (algorithm.value === 'a*') {
+    clearPath()
+
     const path = aStar(graph.value)
 
     if (path.length === 0) {
@@ -111,6 +120,8 @@ const handleRun = async () => {
   }
 
   if (algorithm.value === 'dfs') {
+    clearPath()
+
     const path = await dfs(graph.value)
 
     if (path.length === 0) {
@@ -128,6 +139,8 @@ const handleRun = async () => {
   }
 
   if (algorithm.value === 'dijkstra') {
+    clearPath()
+
     const path = dijkstra(graph.value)
 
     if (path.length === 0) {

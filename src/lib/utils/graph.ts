@@ -29,6 +29,13 @@ export const clearGraph = () => {
   }
 }
 
+export const clearPath = () => {
+  for (const node of graph.value) {
+    node.isVisited = false
+    node.isPath = false
+  }
+}
+
 export const randomGraph = () => {
   clearGraph()
   let startSet = false
@@ -97,4 +104,3 @@ export const clearEndNode = () => {
 export const setWallNode = (row: number, col: number) => {
   graph.value[row * GRID_SIZE + col].isWall = true
 }
-
