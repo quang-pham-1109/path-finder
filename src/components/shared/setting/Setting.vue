@@ -132,7 +132,7 @@ const handleRun = async () => {
       })
     }
 
-    await visualizePathReactive(path)
+    await visualizePathStatic(path)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -151,7 +151,7 @@ const handleRun = async () => {
       })
     }
 
-    await vi(path, graph.value)
+    await visualizePathStatic(path, graph.value)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
