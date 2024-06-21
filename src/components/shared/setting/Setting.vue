@@ -1,17 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup="ts">
 import { ref, watch } from 'vue'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { ButtonTooltip } from '@/components/ui/button-tooltip'
-import { Eraser, Route, RouteOff, Play, BrickWall, Shuffle } from 'lucide-vue-next'
 import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/lib/utils/store'
 import {
   clearEndNode,
