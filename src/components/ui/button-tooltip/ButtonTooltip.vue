@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 defineProps({
-  icon: { type: Object, required: true },
+  icon: { type: Function, required: true },
   tooltipContent: { type: String, required: true },
   handleClick: { type: Function, required: false }
 })
