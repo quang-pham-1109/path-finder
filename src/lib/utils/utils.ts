@@ -8,7 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export const delayRender = () => new Promise((resolve) => setTimeout(resolve, 15))
 
-export const visualizePath = async (path: INode[]) => {
+// This takes in a reactive INodes array
+export const visualizePathReactive = async (path: INode[]) => {
   for (const node of path) {
     if (node.isStart || node.isEnd) {
       continue
@@ -19,7 +20,8 @@ export const visualizePath = async (path: INode[]) => {
   }
 }
 
-export const visualizePathDijkstra = async (path: INode[], graph: INode[]) => {
+// This takes in a normal Inodes array
+export const visualizePathStatic = async (path: INode[], graph: INode[]) => {
   for (const pathNode of path) {
     if (pathNode.isStart || pathNode.isEnd) {
       continue

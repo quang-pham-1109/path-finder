@@ -29,12 +29,6 @@ const reconstructPath = (cameFrom: Map<INode, INode | null>, current: INode): IN
   return totalPath.reverse()
 }
 
-const visualizePath = (path: INode[]) => {
-  path.forEach((node) => {
-    node.isPath = true
-  })
-}
-
 export const aStar = (graph: INode[]): INode[] => {
   const openSet: INode[] = []
   const closedSet: Set<INode> = new Set()
@@ -65,7 +59,6 @@ export const aStar = (graph: INode[]): INode[] => {
 
     if (current === endNode) {
       const path = reconstructPath(cameFrom, current)
-      visualizePath(path)
       return path
     }
 

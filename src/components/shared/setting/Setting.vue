@@ -16,7 +16,7 @@ import { setStart, setEnd, setWall, isWall, algorithm, setAlgorithm } from '@/li
 import { clearEndNode, clearStartNode, clearGraph, graph, randomGraph } from '@/lib/utils/graph'
 import { dfs, dijkstra, aStar } from '@/lib/algorithms'
 import { useToast } from '@/components/ui/toast'
-import { visualizePath, visualizePathDijkstra } from '@/lib/utils/utils'
+import { visualizePathReactive, visualizePathStatic } from '@/lib/utils/utils'
 
 const { toast } = useToast()
 
@@ -94,7 +94,17 @@ const handleRun = async () => {
 
   if (algorithm.value === 'a*') {
     const path = aStar(graph.value)
-    console.log(path)
+
+    if (path.length === 0) {
+      return toast({
+        title: 'Error',
+        description: 'No path found',
+        variant: 'destructive'
+      })
+    }
+
+    await visualizePathReactive(path)
+
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -111,7 +121,7 @@ const handleRun = async () => {
       })
     }
 
-    await visualizePath(path)
+    await visualizePathReactive(path)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
@@ -128,7 +138,7 @@ const handleRun = async () => {
       })
     }
 
-    await visualizePathDijkstra(path, graph.value)
+    await visualizePathStatic(path, graph.value)
     return toast({
       description: `Run ${algorithm.value} algorithm`
     })
