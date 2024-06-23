@@ -101,6 +101,7 @@ const handleRun = async () => {
 
   if (algorithm.value === 'a*') {
     clearPath()
+    const startTime = performance.now()
 
     const path = aStar(graph.value)
 
@@ -114,13 +115,15 @@ const handleRun = async () => {
 
     await visualizePathReactive(path)
 
+    const endTime = performance.now()
     return toast({
-      description: `Run ${algorithm.value} algorithm`
+      description: `${algorithm.value} algorithm completed in ${(endTime - startTime).toFixed(2)} ms`
     })
   }
 
   if (algorithm.value === 'dfs') {
     clearPath()
+    const startTime = performance.now()
 
     const path = await dfs(graph.value)
 
@@ -132,14 +135,16 @@ const handleRun = async () => {
       })
     }
 
-    await visualizePathStatic(path)
+    const endTime = performance.now()
+    await visualizePathReactive(path)
     return toast({
-      description: `Run ${algorithm.value} algorithm`
+      description: `${algorithm.value} algorithm completed in ${(endTime - startTime).toFixed(2)}ms`
     })
   }
 
   if (algorithm.value === 'dijkstra') {
     clearPath()
+    const startTime = performance.now()
 
     const path = dijkstra(graph.value)
 
@@ -151,9 +156,10 @@ const handleRun = async () => {
       })
     }
 
+    const endTime = performance.now()
     await visualizePathStatic(path, graph.value)
     return toast({
-      description: `Run ${algorithm.value} algorithm`
+      description: `${algorithm.value} algorithm completed in ${(endTime - startTime).toFixed(2)}ms`
     })
   }
 }
